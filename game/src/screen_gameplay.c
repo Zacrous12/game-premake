@@ -31,6 +31,14 @@
 //----------------------------------------------------------------------------------
 static int framesCounter = 0;
 static int finishScreen = 0;
+static const int screenWidth = 800;
+static const int screenHeight = 450;
+
+// Player Variables
+float playerX = 800 / 2.0;
+float playerY = 450/ 2.0;
+int speed = 3;
+
 
 //----------------------------------------------------------------------------------
 // Gameplay Screen Functions Definition
@@ -40,7 +48,7 @@ static int finishScreen = 0;
 void InitGameplayScreen(void)
 {
     // TODO: Initialize GAMEPLAY screen variables here!
-    framesCounter = 0;
+    framesCounter = 1;
     finishScreen = 0;
 }
 
@@ -50,21 +58,49 @@ void UpdateGameplayScreen(void)
     // TODO: Update GAMEPLAY screen variables here!
 
     // Press enter or tap to change to ENDING screen
-    if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
+    if (IsKeyPressed(KEY_ESCAPE) || IsGestureDetected(GESTURE_TAP))
     {
         finishScreen = 1;
         PlaySound(fxCoin);
     }
+
+    if (IsKeyDown(KEY_RIGHT) && IsKeyDown(KEY_LEFT)) {}
+    else {
+        if (IsKeyDown(KEY_RIGHT)) {
+            playerX += 3;
+        }  
+        else if (IsKeyDown(KEY_LEFT)) {
+            playerX -= 3;
+        }
+    }
+
+    if (IsKeyDown(KEY_UP) && IsKeyDown(KEY_DOWN)) {}
+    else {
+        if (IsKeyDown(KEY_UP)) {
+            playerY -= 3;
+        }
+        else if (IsKeyDown(KEY_DOWN)) {
+            playerY += 3;
+        }
+    }
+
 }
 
 // Gameplay Screen Draw logic
 void DrawGameplayScreen(void)
 {
     // TODO: Draw GAMEPLAY screen here!
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), PURPLE);
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), WHITE);
     Vector2 pos = { 20, 10 };
-    DrawTextEx(font, "GAMEPLAY SCREEN", pos, font.baseSize*3.0f, 4, MAROON);
-    DrawText("PRESS ENTER or TAP to JUMP to ENDING SCREEN", 130, 220, 20, MAROON);
+
+    Vector3 player = {
+        playerX,
+        playerY,
+        1.0
+    };
+    DrawCircleGradient(200, 300, 40.0, GREEN, BLUE);
+    DrawCapsule(player, player, 40, 4, 1000, BLUE);
+
 }
 
 // Gameplay Screen Unload logic
